@@ -176,8 +176,12 @@ int val = 42;
 vect_push_back(&v, &val);
 ```
 > [!IMPORTANT]  
-> Make sure you call `vect_init` **BEFORE** using the vector. 
-> Failing to do so can lead to undefined behavior.
+> Make sure you call `vect_init` or use the `VECT_INITIALIZER` **BEFORE** 
+> using the vector. Failing to do so can lead to undefined behavior. 
+> If you use `VECT_INITIALIZER`, you will be able to use the vector functions
+> without undefined behavior; however, you will not be able to do anything
+> functional with it, unless you call `vect_init`, or use `vect_assign` to
+> assign another array to the vector.
 
 
 ### Example code
