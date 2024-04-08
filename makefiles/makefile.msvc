@@ -1,0 +1,48 @@
+TARGET = vectest.exe
+RELEASE_BUNDLE_FOLDER = CVector_Windows_MSVC_%%platform%%
+LIBNAME = cvector
+CC = cl /nologo
+CFLAGS = /c
+
+default: staticlib
+
+!IF "$(DEBUG)" == "yes"
+CFLAGS = /c /Zi
+LIBNAME = cvectord
+TARGET = vectestd.exe
+SUFFIX = d
+!ENDIF
+!IF "$(RELEASE)" == "yes"
+CFLAGS = /c /Os
+!ENDIF
+
+test-static: test$(SUFFIX).obj staticlib
+	$(CC) /MD /Fe$(TARGET) test$(SUFFIX).obj $(LIBNAME).lib
+
+staticlib: vector$(SUFFIX).obj
+	lib /nologo vector$(SUFFIX).obj /OUT:$(LIBNAME).lib
+
+vector$(SUFFIX).obj: vector.c
+	$(CC) $(CFLAGS) vector.c /Fo$@
+
+test$(SUFFIX).obj: test.c
+	$(CC) $(CFLAGS) /MD test.c /Fo$@
+
+release-bundle:
+	@$(MAKE) /nologo RELEASE=yes
+	@$(MAKE) /nologo DEBUG=yes
+	@if not exist $(RELEASE_BUNDLE_FOLDER)\libs\release mkdir $(RELEASE_BUNDLE_FOLDER)\libs\release
+	@if not exist $(RELEASE_BUNDLE_FOLDER)\libs\debug mkdir $(RELEASE_BUNDLE_FOLDER)\libs\debug
+	@copy $(LIBNAME).lib $(RELEASE_BUNDLE_FOLDER)\libs\release
+	@copy $(LIBNAME)d.lib $(RELEASE_BUNDLE_FOLDER)\libs\debug
+	@copy *.pdb $(RELEASE_BUNDLE_FOLDER)\libs\debug
+	@copy LICENSE $(RELEASE_BUNDLE_FOLDER)
+	@copy README.md $(RELEASE_BUNDLE_FOLDER)
+	@copy vector.h $(RELEASE_BUNDLE_FOLDER)
+
+clean:
+	del .\*.obj
+	del .\*.lib
+	del .\*.exe
+	del .\*.pdb
+	rd /s /q $(RELEASE_BUNDLE_FOLDER)

@@ -1,0 +1,30 @@
+TARGET = vectest.exe
+LIB = cvector.lib
+LIBOBJS = vector.obj
+TESTOBJS = test.obj
+
+CFLAGS = -w -c -G -O -d -Z
+CC = tcc
+CCLIB = tlib
+
+default: $(LIB)
+all: default test-static
+test-static: $(TARGET)
+staticlib: $(LIB)
+
+$(TARGET): $(TESTOBJS) $(LIB)
+    @echo $(CC) $<
+    @$(CC) -e$(TARGET) $(TESTOBJS) $(LIB)
+
+$(LIB): $(LIBOBJS)
+    @echo $(CCLIB) $<
+    @$(CCLIB) $(LIB) +$(LIBOBJS)    
+
+.c.obj:
+    @echo $(CC) $<
+    @$(CC) $(CFLAGS) $<
+
+clean:
+    del .\*.obj
+    del .\*.exe
+    del .\*.lib
