@@ -205,6 +205,8 @@ void assign_test(void)
 void initializer_test(void)
 {
     int x = 10;
+    int arr[] = { 10, 20, 30 };
+    size_t arr_size = sizeof(arr) / sizeof(int);
     vector n = VECT_INITIALIZER;
 
     START_TEST("Initializer");
@@ -216,6 +218,14 @@ void initializer_test(void)
     assert(vect_data(&n) == NULL);
     assert(vect_erase(&n, 2, 5) == 0);
     assert(vect_clear(&n) == 0);
+    assert(vect_shrink_to_fit(&n) == 1);
+    assert(vect_assign(&n, arr, arr_size, sizeof(int)) == 0);
+    assert(vect_size(&n) == arr_size);
+    assert(vect_push_back(&n, &x) == 0);
+    assert(vect_pop_back(&n) == 0);
+    assert(arr[0] == *(int *) vect_front(&n));
+    assert(arr[arr_size - 1] == *(int *) vect_back(&n));
+    vect_free(&n);
     TEST_PASS;
 }
 
