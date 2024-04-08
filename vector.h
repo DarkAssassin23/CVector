@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+#define VECT_INITIALIZER { NULL, 0, 0, 0 }
+
 /**
  * @struct vector
  * @brief Components that make up the vector data structure
@@ -160,14 +162,16 @@ void *vect_back(vector *v);
  * @param end The ending index
  * @note The range is [start, end), meaning the elements are removed starting
  * at, and including, start and going to, but not including, end
+ * @return 0 on success
  */
-void vect_erase(vector *v, size_t start, size_t end);
+int vect_erase(vector *v, size_t start, size_t end);
 
 /**
  * @brief Remove all elements from the vector
  * @param v The vector to clear the elements of
+ * @return 0 on success
  */
-void vect_clear(vector *v);
+int vect_clear(vector *v);
 
 /**
  * @brief Free the memory allocated by the vector

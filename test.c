@@ -202,6 +202,23 @@ void assign_test(void)
     TEST_PASS;
 }
 
+void initializer_test(void)
+{
+    int x = 10;
+    vector n = VECT_INITIALIZER;
+
+    START_TEST("Initializer");
+    assert(vect_push_back(&n, &x) == 1);
+    assert(vect_pop_back(&n) == 1);
+    assert(vect_insert(&n, &x, 10) == 1);
+    assert(vect_front(&n) == NULL);
+    assert(vect_back(&n) == NULL);
+    assert(vect_data(&n) == NULL);
+    assert(vect_erase(&n, 2, 5) == 0);
+    assert(vect_clear(&n) == 0);
+    TEST_PASS;
+}
+
 int main(void)
 {
     int size = 4, x;
@@ -215,6 +232,7 @@ int main(void)
     swap_test();
     reserve_test();
     assign_test();
+    initializer_test();
 
     for (x = 0; x < size + 3; x++)
     {

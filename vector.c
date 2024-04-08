@@ -17,6 +17,9 @@ static int resize(vector *v)
     size_t new_size = MAX(v->size, 1) * 2;
     void *tmp = NULL;
 
+    if (v->t_size == 0)
+        return 1;
+
     /* Handle uninitalized vector */
     if (v->arr == NULL)
     {
@@ -311,13 +314,13 @@ void *vect_back(vector *v)
     return (v->len == 0) ? NULL : vect_at(v, v->len - 1);
 }
 
-void vect_erase(vector *v, size_t start, size_t end)
+int vect_erase(vector *v, size_t start, size_t end)
 {
     size_t mv_size;
     void *src, *dest;
 
     if (!valid_vect(v))
-        return;
+        return 1;
 
     if (start > end)
     {
@@ -327,15 +330,12 @@ void vect_erase(vector *v, size_t start, size_t end)
     }
 
     if (start >= v->len)
-        return;
+        return 0;
 
     end = MIN(v->len, end);
 
     if (end == v->len)
-    {
-        vect_resize(v, start);
-        return;
-    }
+        return vect_resize(v, start);
 
     src = (char *) v->arr + (end * v->t_size);
     dest = (char *) v->arr + (start * v->t_size);
@@ -343,12 +343,13 @@ void vect_erase(vector *v, size_t start, size_t end)
     memmove(dest, src, mv_size * v->t_size);
 
     v->len -= (end - start);
+    return 0;
 }
 
-void vect_clear(vector *v)
+int vect_clear(vector *v)
 {
     if (!valid_vect(v))
-        return;
+        return 1;
 
     if (v->arr != NULL)
     {
@@ -357,6 +358,7 @@ void vect_clear(vector *v)
     }
     v->len = 0;
     v->size = 0;
+    return 0;
 }
 
 void vect_free(vector *v)
