@@ -123,14 +123,12 @@ int vect_resize(vector *v, size_t new_size)
     if (!valid_vect(v))
         return 1;
 
+    if (v->t_size == 0)
+        return 1;
+
     /* Handle uninitialized vector */
     if (v->arr == NULL && new_size != 0)
     {
-        if (v->t_size == 0)
-        {
-            fprintf(stderr, "Error: Uninitalized vector with no type\n");
-            return 1;
-        }
         v->arr = (void *) calloc(new_size, v->t_size);
         if (v->arr != NULL)
         {
