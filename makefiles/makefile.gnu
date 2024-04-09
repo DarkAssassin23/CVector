@@ -1,6 +1,6 @@
 TARGET = vectest
 CC = gcc
-CFLAGS = -g -Wall -Wextra -pedantic -ansi
+CFLAGS = -Wall -Wextra -pedantic -ansi
 ARCH = $(shell $(CC) -dumpmachine | cut -d - -f1)
 
 LIBSDIR = libs
